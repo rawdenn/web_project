@@ -19,7 +19,7 @@ function Orders() {
       return;
     }
 
-    fetch(`http://localhost:5000/api/users/${user.id}/orders`, {
+    fetch(`${API_BASE_URL}/api/users/${user.id}/orders`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -45,7 +45,7 @@ function Orders() {
     const token = localStorage.getItem("token");
 
     setDeleting(orderId);
-    fetch(`http://localhost:5000/api/orders/${orderId}`, {
+    fetch(`${API_BASE_URL}/api/orders/${orderId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
