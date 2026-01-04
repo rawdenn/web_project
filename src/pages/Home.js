@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { assets } from "../assets/assets";
+import API_BASE_URL from "../config/api";
 import HomeSection from "../components/HomeSection";
 import "../styles/Home.css";
 
@@ -17,7 +18,7 @@ function Home() {
   useEffect(() => {
     const bestSellerIds = [2, 12, 13];
     
-    fetch("http://localhost:5000/api/products")
+    fetch(`${API_BASE_URL}/api/products`)
       .then(res => res.json())
       .then(data => {
         const sellers = bestSellerIds
@@ -29,7 +30,7 @@ function Home() {
           }));
         setBestSellers(sellers);
       })
-      .catch(err => console.error("Failed to fetch products:", err));
+      .catch(err => console.error("Failed to fetch products:", Yerr));
   }, []);
 
   const categories = [
