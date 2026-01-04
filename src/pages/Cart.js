@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 import CartItem from "../components/CartItem";
@@ -7,25 +7,31 @@ function Cart() {
   const { cartItems, clearCart } = useContext(CartContext);
   const navigate = useNavigate();
   const totalPrice = cartItems.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
-  const handleCheckout = async () => {
+  const submitCheckout = async () => {
     const token = localStorage.getItem("token");
     const user = JSON.parse(localStorage.getItem("user"));
 
-    // Check if user is logged in
     if (!token || !user) {
-      alert("Please login to proceed with checkout");
+      setError("Please log in to proceed with checkout.");
       navigate("/login");
       return;
     }
 
-    // Prepare order data
     const orderData = {
       userId: user.id,
       items: cartItems,
       totalPrice: totalPrice,
       orderDate: new Date().toISOString(),
     };
+
+    setSubmitting(true);
+    setError("");
+    setMessage("");
 
     try {
       const response = await fetch("http://localhost:5000/api/orders", {
@@ -38,23 +44,49 @@ function Cart() {
       });
 
       if (response.ok) {
-        const result = await response.json();
-        alert("Order placed successfully!");
+        setMessage("Order placed successfully!");
         clearCart();
+        setShowConfirm(false);
         navigate("/");
       } else {
-        const error = await response.json();
-        alert(`Error: ${error.message}`);
+        const err = await response.json();
+        setError(err.message || "Failed to place order.");
       }
-    } catch (error) {
-      console.error("Checkout error:", error);
-      alert("Failed to place order. Please try again.");
+    } catch (err) {
+      console.error("Checkout error:", err);
+      setError("Failed to place order. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const openConfirm = () => {
+    const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!token || !user) {
+      setError("Please log in to proceed with checkout.");
+      navigate("/login");
+      return;
+    }
+    setShowConfirm(true);
+  };
+
+  const closeConfirm = () => {
+    if (!submitting) {
+      setShowConfirm(false);
     }
   };
 
   return (
     <div className="container my-5">
       <h1 className="mb-4 text-center">Your Cart</h1>
+
+      {error && (
+        <div className="alert alert-danger" role="alert">{error}</div>
+      )}
+      {message && (
+        <div className="alert alert-success" role="alert">{message}</div>
+      )}
 
       {cartItems.length === 0 ? (
         <div className="text-center mt-5">
@@ -85,11 +117,40 @@ function Cart() {
             <button className="btn btn-outline-dark btn-lg" onClick={clearCart}>
               Clear Cart
             </button>
-            <button className="btn btn-dark btn-lg" onClick={handleCheckout}>
+            <button className="btn btn-dark btn-lg" onClick={openConfirm}>
               Checkout
             </button>
           </div>
 
+        </>
+      )}
+
+      {showConfirm && (
+        <>
+          <div className="modal fade show d-block" tabIndex="-1" role="dialog" aria-modal="true">
+            <div className="modal-dialog modal-dialog-centered" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Confirm Checkout</h5>
+                  <button type="button" className="btn-close" aria-label="Close" onClick={closeConfirm} />
+                </div>
+                <div className="modal-body">
+                  <p className="mb-2">You are about to place this order.</p>
+                  <p className="mb-1"><strong>Items:</strong> {cartItems.length}</p>
+                  <p className="mb-0"><strong>Total:</strong> ${totalPrice.toFixed(2)}</p>
+                </div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" onClick={closeConfirm} disabled={submitting}>
+                    Cancel
+                  </button>
+                  <button type="button" className="btn btn-dark" onClick={submitCheckout} disabled={submitting}>
+                    {submitting ? "Placing..." : "Place Order"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="modal-backdrop fade show" />
         </>
       )}
     </div>

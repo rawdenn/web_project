@@ -5,6 +5,8 @@ function Orders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [deleting, setDeleting] = useState(null);
+  const [confirmOrder, setConfirmOrder] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,6 +38,44 @@ function Orders() {
         setLoading(false);
       });
   }, [navigate]);
+
+  const handleDeleteOrder = (orderId) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("token");
+
+    setDeleting(orderId);
+    fetch(`http://localhost:5000/api/orders/${orderId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ userId: user.id }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.message === "Order deleted successfully") {
+          setOrders(orders.filter(order => order.id !== orderId));
+          setError("");
+        } else {
+          setError(data.message || "Failed to delete order");
+        }
+        setDeleting(null);
+      })
+      .catch(err => {
+        console.error("Failed to delete order:", err);
+        setError("Failed to delete order");
+        setDeleting(null);
+      });
+  };
+
+  const openConfirm = (order) => setConfirmOrder(order);
+  const closeConfirm = () => setConfirmOrder(null);
+  const handleConfirmDelete = () => {
+    if (!confirmOrder) return;
+    handleDeleteOrder(confirmOrder.id);
+    closeConfirm();
+  };
 
   if (loading) {
     return (
@@ -111,11 +151,49 @@ function Orders() {
                       <small className="text-muted">No items in this order</small>
                     )}
                   </div>
+
+                  {/* Delete Button */}
+                  <div className="mt-3 d-flex justify-content-end">
+                    <button
+                      onClick={() => openConfirm(order)}
+                      disabled={deleting === order.id}
+                      className="btn btn-outline-danger btn-sm"
+                    >
+                      {deleting === order.id ? "Deleting..." : "Delete Order"}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
+      )}
+
+      {confirmOrder && (
+        <>
+          <div className="modal fade show d-block" tabIndex="-1" role="dialog" aria-modal="true">
+            <div className="modal-dialog modal-dialog-centered" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Delete Order #{confirmOrder.id}</h5>
+                  <button type="button" className="btn-close" aria-label="Close" onClick={closeConfirm} />
+                </div>
+                <div className="modal-body">
+                  <p className="mb-0">This will permanently remove the order and its items. Proceed?</p>
+                </div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" onClick={closeConfirm} disabled={deleting === confirmOrder.id}>
+                    Cancel
+                  </button>
+                  <button type="button" className="btn btn-danger" onClick={handleConfirmDelete} disabled={deleting === confirmOrder.id}>
+                    {deleting === confirmOrder.id ? "Deleting..." : "Delete"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="modal-backdrop fade show" />
+        </>
       )}
     </div>
   );

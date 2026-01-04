@@ -232,6 +232,48 @@ app.get("/api/users/:userId/orders", (req, res) => {
   });
 });
 
+app.delete("/api/orders/:orderId", (req, res) => {
+  const { orderId } = req.params;
+  const userId = req.body.userId;
+
+  if (!userId) {
+    return res.status(400).json({ message: "User ID is required" });
+  }
+
+  // First verify that the order belongs to the user
+  const verifySql = "SELECT id FROM orders WHERE id = ? AND user_id = ?";
+  db.query(verifySql, [orderId, userId], (verifyErr, verifyResult) => {
+    if (verifyErr) {
+      console.error("❌ Database query error:", verifyErr);
+      return res.status(500).json({ message: "Failed to delete order" });
+    }
+
+    if (verifyResult.length === 0) {
+      return res.status(404).json({ message: "Order not found or unauthorized" });
+    }
+
+    // Delete order items first
+    const deleteItemsSql = "DELETE FROM order_items WHERE order_id = ?";
+    db.query(deleteItemsSql, [orderId], (itemErr) => {
+      if (itemErr) {
+        console.error("❌ Database query error:", itemErr);
+        return res.status(500).json({ message: "Failed to delete order items" });
+      }
+
+      // Delete the order
+      const deleteOrderSql = "DELETE FROM orders WHERE id = ?";
+      db.query(deleteOrderSql, [orderId], (deleteErr) => {
+        if (deleteErr) {
+          console.error("❌ Database query error:", deleteErr);
+          return res.status(500).json({ message: "Failed to delete order" });
+        }
+
+        res.json({ message: "Order deleted successfully" });
+      });
+    });
+  });
+});
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
