@@ -65,15 +65,15 @@ function Products({ search }) {
 
   const categories = useMemo(
     () => ["All", ...new Set(productsData.map(p => p.category))],
-    []
+    [productsData]
   );
   const fandoms = useMemo(
     () => ["All", ...new Set(productsData.map(p => p.fandom).filter(Boolean))],
-    []
+    [productsData]
   );
   const colors = useMemo(
     () => ["All", ...new Set(productsData.map(p => p.color).filter(Boolean))],
-    []
+    [productsData]
   );
 
   const filteredProducts = useMemo(() => {
