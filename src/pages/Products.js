@@ -1,6 +1,5 @@
 import { useState, useContext, useMemo, useEffect } from "react";
 import { CartContext } from "../context/CartContext";
-import API_BASE_URL from "../config/api";
 import { assets } from "../assets/assets";
 import ProductCarousel from "../styles/ProductCarousel";
 import "../styles/Products.css";
@@ -47,7 +46,7 @@ function Products({ search }) {
   const { addToCart } = useContext(CartContext);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/products`)
+    fetch("http://localhost:5000/api/products")
       .then(res => res.json())
       .then(data => {
         // Map filenames to actual image imports

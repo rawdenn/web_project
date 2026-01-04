@@ -14,11 +14,10 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // ---------- DATABASE ----------
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "",
-  database: process.env.DB_NAME || "yunojewels",
-  port: process.env.DB_PORT || 3306,
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "yunojewels",
 });
 
 db.connect((err) => {
@@ -29,7 +28,7 @@ db.connect((err) => {
   console.log("✅ MySQL Connected");
 });
 
-// ---------- ENCRYPTION/DECRYPTION ----------
+
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || "0".repeat(32); // 32 chars for 256-bit key
 const ALGORITHM = "aes-256-cbc";
 
