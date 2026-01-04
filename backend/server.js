@@ -1,18 +1,14 @@
-// ---------- IMPORTS ----------
 const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql2");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 require("dotenv").config();
-
-// ---------- APP SETUP ----------
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// ---------- DATABASE ----------
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",

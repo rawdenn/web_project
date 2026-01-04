@@ -4,7 +4,6 @@ import { assets } from "../assets/assets";
 import HomeSection from "../components/HomeSection";
 import "../styles/Home.css";
 
-// Image mapping for database filenames
 const imageMap = {
   "Kuromi1.jpeg": assets.Kuromi,
   "caleb.jpeg": assets.caleb,
@@ -132,7 +131,6 @@ function Home() {
             </div>
           </div>
         </HomeSection>
-
 
       </div>
     </div>
