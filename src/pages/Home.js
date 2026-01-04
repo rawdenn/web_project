@@ -13,9 +13,10 @@ const imageMap = {
 
 function Home() {
   const [bestSellers, setBestSellers] = useState([]);
-  const bestSellerIds = [2, 12, 13];
 
   useEffect(() => {
+    const bestSellerIds = [2, 12, 13];
+    
     fetch("http://localhost:5000/api/products")
       .then(res => res.json())
       .then(data => {
@@ -29,7 +30,7 @@ function Home() {
         setBestSellers(sellers);
       })
       .catch(err => console.error("Failed to fetch products:", err));
-  }, [bestSellerIds]);
+  }, []);
 
   const categories = [
     { name: "Earrings", img: assets.earrings },
