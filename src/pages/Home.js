@@ -30,7 +30,7 @@ function Home() {
           }));
         setBestSellers(sellers);
       })
-      .catch(err => console.error("Failed to fetch products:", Yerr));
+      .catch(err => console.error("Failed to fetch products:", err));
   }, []);
 
   const categories = [
