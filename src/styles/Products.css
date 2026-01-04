@@ -1,0 +1,27 @@
+/* Product card hover effect */
+.card-hover {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Add to Cart button hover */
+.add-to-cart-btn {
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.add-to-cart-btn:hover {
+  transform: scale(1.05);
+  background-color: #343a40; /* Slightly darker shade */
+}
+
+.card-hover img {
+  transition: transform 0.3s;
+}
+
+.card-hover:hover img {
+  transform: scale(1.05);
+}

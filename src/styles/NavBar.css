@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+.navbar {
+  background-color: rgb(199, 148, 199);
+  font-family: Outfit;
+
+}
+
+.navbar-brand img {
+  border-radius: 4px;
+  width: 40px;
+  height: 40px;
+  margin-left: 15px;
+}
+
+.navbar .nav-link {
+  margin-right: 20px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.navbar .nav-link:hover {
+  color: purple;
+  text-decoration: none;
+}
+
+.navbar form .form-control {
+  width: 200px;
+}
+
+.navbar .active {
+  padding-bottom: 2px;
+  border-bottom: 2px solid purple;
+}
+
+.cart-link {
+  color: #000;
+  font-weight: 500;
+  padding: 5px 10px;
+}
+
+.cart-link:hover {
+  color: purple;
+  text-decoration: none;
+}
+
+.badge {
+  font-size: 0.65rem;
+}

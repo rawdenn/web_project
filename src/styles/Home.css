@@ -1,0 +1,135 @@
+/* ================================
+   HERO SECTION
+================================ */
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+.hero-section img {
+  filter: brightness(70%);
+}
+
+.hero-text h1 {
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.hero-text p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* Smooth fade-in for hero text */
+.hero-text {
+  animation: fadeIn 1.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translate(-50%, -40%); }
+  100% { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+/* ================================
+   CATEGORY CARDS
+================================ */
+.card {
+  border-radius: 15px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.15);
+}
+
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+
+/* ================================
+   BEST SELLERS
+================================ */
+.card-img-top:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+/* Make price stand out */
+.text-primary {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* ================================
+   CUSTOM JEWELRY CTA
+================================ */
+.custom-cta {
+  background: #f7f7f7;
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.custom-cta:hover {
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* ================================
+   INSTAGRAM GRID
+================================ */
+.insta-img {
+  border-radius: 12px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.insta-img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+/* ================================
+   BUTTONS
+================================ */
+.btn-dark, .btn-light, .btn-outline-dark {
+  border-radius: 30px;
+  padding: 8px 20px;
+}
+
+.btn-dark:hover {
+  background: #222 !important;
+}
+
+/* ================================
+   GLOBAL ANIMATIONS
+================================ */
+.fade-in {
+  animation: fadeInUp 0.9s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(15px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width: 768px) {
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+
+  .hero-section img {
+    max-height: 350px;
+  }
+
+  .card-img-top {
+    height: 160px;
+  }
+}
+
